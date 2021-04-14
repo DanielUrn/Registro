@@ -18,6 +18,6 @@ const pnombre = 'REGISTRO DE EMPLEADOS';
 //ABIERTO
 
 //INICIAR SERVER
-app.listen(app.get('port', ()=>{
+app.listen(app.get('port'), ()=>{
     console.log('SERVIDOR INICIADO EN ', app.get('port'));
-}))
+});
