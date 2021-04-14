@@ -4,7 +4,7 @@
   "description": "PROYECTO DE BASES DE DATOS 1",
   "main": "index.js",
   "scripts": {
-    "test": "dev"
+    "dev": "nodemon src"
   },
   "author": "Daniel Urdaneta, Leonardo Rincón",
   "license": "ISC",
