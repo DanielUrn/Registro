@@ -13,7 +13,7 @@ app.use(morgan('dev'));
 const pnombre = 'REGISTRO DE EMPLEADOS';
 
 //RUTAS
-
+app.use(require('./routes'));
 
 //ABIERTO
 
