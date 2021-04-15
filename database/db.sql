@@ -53,3 +53,15 @@ CREATE TABLE sucursales(
     direccion VARCHAR(200) NOT NULL,
     nempleados INT(5) NOT NULL
 );
+
+-- ENLACES
+
+CREATE TABLE enlaces(
+    id INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    titulo VARCHAR(150) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    description TEXT,
+    usuario_id INT(11),
+    created_at timestamp NOT NULL default current_timestamp,
+    fk_usuario INT REFERENCES usuario(idusuario)
+);
