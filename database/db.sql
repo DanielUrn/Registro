@@ -18,6 +18,7 @@ CREATE TABLE horarios(
 CREATE TABLE empleados(
     idempleado INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
+    cedula INT(13) NOT NULL,
     direccion VARCHAR(120),
     correo VARCHAR(30) NOT NULL,
     telefono VARCHAR(15),

@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
-const hdbs = require('express-handlebars');
+const hbs = require('express-handlebars');
 
 //INICIALIZACIONES
 const app = express();
@@ -10,7 +10,7 @@ const app = express();
 app.set('port', process.env.PORT || 4000);
 app.set('views', path.join(__dirname, 'views'));
 
-app.engine('.hdbs', hdbs({
+app.engine('.hbs', hbs({
     defaultLayout: 'main',
     layoutsDir: path.join(app.get('views'), 'layouts'),
     partialsDir: path.join(app.get('views'),'partials'),
@@ -36,7 +36,7 @@ const pnombre = 'REGISTRO DE EMPLEADOS';
 //RUTAS
 app.use(require('./routes'));
 app.use(require('./routes/auth'));
-app.use('/links',require('./routes/links'));
+app.use('/trabajador',require('./routes/trabajador'));
 
 
 //PUBLICO
