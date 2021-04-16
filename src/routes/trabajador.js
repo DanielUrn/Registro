@@ -25,12 +25,12 @@ router.get('/borrar/:idempleado', async (req,res) => {
 router.get('/editt/:idempleado', async (req,res) =>{
    const { idempleado } = req.params;
    const empleado = await pool.query('SELECT * FROM empleados WHERE idempleado=?', [idempleado]);
-   res.render('trabajador/editt', {empleado:empleado[0]})
+   res.render('trabajador/editt', {empleado:empleado[0]});
 });
 
 //POSTS
 router.post('/ingresart', async (req,res)=>{
-    const { nombre, cedula, direccion, correo, telefono} = req.body;
+    const { nombre, cedula, direccion, correo, telefono } = req.body;
     const anadir = { 
         nombre,
         cedula, 
@@ -38,8 +38,20 @@ router.post('/ingresart', async (req,res)=>{
         correo, 
         telefono
     };
+    
     await pool.query('INSERT INTO empleados set ?', [anadir]);
-    res.redirect('/trabajador/listat')
+    
+    //Añadir empleado a la lista de promociones/degrados
+    const ingreso = await pool.query('SELECT ingreso FROM empleados where cedula=?',[cedula]);
+    const fk_idempleado = await pool.query('SELECT idempleado FROM empleados where cedula=?',[cedula]);
+    const estado=true;
+    const anadirlista = {
+        ingreso,
+        fk_idempleado,
+        estado
+    };
+    await pool.query('INSERT INTO lista set ?',[anadirlista]);
+    res.redirect('/trabajador/listat');
 })
 
 router.post('/editt/:idempleado', async (req,res) => {
@@ -52,6 +64,7 @@ router.post('/editt/:idempleado', async (req,res) => {
         correo, 
         telefono
     };
+    
     await pool.query('UPDATE empleados set ? WHERE idempleado=?', [update,idempleado]);
     res.redirect('/trabajador/listat');
 });

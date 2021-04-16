@@ -5,7 +5,8 @@ CREATE TABLE usuarios(
     idusuario INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(40) NOT NULL,
     usuario VARCHAR(20) NOT NULL,
-    contrasena VARCHAR(10) NOT NULL
+    contrasena VARCHAR(10) NOT NULL,
+    ingreso   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE horarios(
@@ -22,6 +23,8 @@ CREATE TABLE empleados(
     direccion VARCHAR(120),
     correo VARCHAR(30) NOT NULL,
     telefono VARCHAR(15),
+    ingreso   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    editado   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_idcargo INT REFERENCES cargos(idcargo)
 );
 
@@ -42,8 +45,7 @@ CREATE TABLE cargos(
 
 CREATE TABLE lista(
     idmov INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    fentrada DATE NOT NULL,
-    fsalida DATE NOT NULL,
+    ingreso TIMESTAMP NOT NULL,
     estado BOOLEAN NOT NULL,
     fk_idempleado INT REFERENCES empleados(idempleado)
 );
