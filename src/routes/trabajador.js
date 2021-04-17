@@ -2,30 +2,29 @@ const express =require('express');
 const pool = require('../database');
 const router = express.Router();
 
-const db = require('../database');
-
+//TRABAJADORES
 //GETS
 router.get('/ingresart', (req, res)=> {
-    res.render('trabajador/ingresart');
+    res.render('inicio/trabajador/ingresart');
 })
 
 router.get('/listat', async (req, res) => {
 
     const lista = await pool.query('SELECT * FROM empleados ORDER BY nombre');
-    res.render('trabajador/listat', {lista: lista});
+    res.render('inicio/trabajador/listat', {lista: lista});
 
 });
 
 router.get('/borrar/:idempleado', async (req,res) => {
     const { idempleado } = req.params;
     await pool.query('DELETE FROM empleados WHERE idempleado=?',[idempleado]);
-    res.redirect('/trabajador/listat');
+    res.redirect('/inicio/trabajador/listat');
 });
 
 router.get('/editt/:idempleado', async (req,res) =>{
    const { idempleado } = req.params;
    const empleado = await pool.query('SELECT * FROM empleados WHERE idempleado=?', [idempleado]);
-   res.render('trabajador/editt', {empleado:empleado[0]});
+   res.render('inicio/trabajador/editt', {empleado:empleado[0]});
 });
 
 //POSTS
@@ -40,18 +39,7 @@ router.post('/ingresart', async (req,res)=>{
     };
     
     await pool.query('INSERT INTO empleados set ?', [anadir]);
-    
-    //Añadir empleado a la lista de promociones/degrados
-    const ingreso = await pool.query('SELECT ingreso FROM empleados where cedula=?',[cedula]);
-    const fk_idempleado = await pool.query('SELECT idempleado FROM empleados where cedula=?',[cedula]);
-    const estado=true;
-    const anadirlista = {
-        ingreso,
-        fk_idempleado,
-        estado
-    };
-    await pool.query('INSERT INTO lista set ?',[anadirlista]);
-    res.redirect('/trabajador/listat');
+    res.redirect('/inicio/trabajador/listat');
 })
 
 router.post('/editt/:idempleado', async (req,res) => {
@@ -66,7 +54,8 @@ router.post('/editt/:idempleado', async (req,res) => {
     };
     
     await pool.query('UPDATE empleados set ? WHERE idempleado=?', [update,idempleado]);
-    res.redirect('/trabajador/listat');
+    res.redirect('/inicio/trabajador/listat');
 });
+//FIN TRABAJADORES
 
 module.exports = router;

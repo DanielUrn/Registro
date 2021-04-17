@@ -11,8 +11,8 @@ CREATE TABLE usuarios(
 
 CREATE TABLE horarios(
     idhorario INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    fentrada DATE NOT NULL,
-    fsalida DATE NOT NULL,
+    fentrada INT(2) NOT NULL,
+    fsalida INT(2) NOT NULL,
     horas INT(2) NOT NULL
 );
 

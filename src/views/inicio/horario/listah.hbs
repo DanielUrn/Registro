@@ -1,0 +1,25 @@
+<div class="container p-4">
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Entrada</th>
+      <th scope="col">Salida</th>
+      <th scope="col">Horas</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each lista}}
+    <tr>
+      <th scope="row">{{idhorario}}</th>
+      <td>{{fentrada}}</td>
+      <td>{{fsalida}}</td>
+      <td>{{horas}}</td>
+      
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+</div>
