@@ -13,8 +13,10 @@ CREATE TABLE horarios(
     idhorario INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     fentrada INT(2) NOT NULL,
     fsalida INT(2) NOT NULL,
-    horas INT(2) NOT NULL
+    horas INT(2) NOT NULL 
 );
+
+
 
 CREATE TABLE empleados(
     idempleado INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
