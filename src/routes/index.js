@@ -133,4 +133,73 @@ router.post('/sede/edits/:idsucursal', async (req,res) => {
 });
 //FIN SEDES
 
+
+
+//HORARIOS
+//GETS
+
+router.get('/horario/listah', async (req, res) => {
+
+    const lista = await pool.query('SELECT * FROM horarios ORDER BY idhorario');
+    res.render('inicio/horario/listah', {lista: lista});
+
+});
+module.exports = router;
+
+//FIN HORARIOS
+
+//CARGOS
+//GETS
+
+router.get('/cargo/ingresarc', async (req, res)=> {
+    const horario = await pool.query('SELECT idhorario,fentrada,fsalida FROM horarios ORDER BY fentrada');
+    res.render('inicio/cargo/ingresarc', {horario: horario});
+})
+
+
+router.get('/cargo/listac', async (req, res) => {
+
+    const lista = await pool.query('SELECT idcargo,cnombre, departamento,fentrada,fsalida FROM cargos INNER JOIN horarios ON cargos.horario = horarios.idhorario');
+    res.render('inicio/cargo/listac', {lista: lista});
+
+});
+
+router.get('/cargo/borrar/:idcargo', async (req,res) => {
+    const { idcargo } = req.params;
+    await pool.query('DELETE FROM cargos WHERE idcargo=?',[idcargo]);
+    res.redirect('/inicio/cargo/listac');
+});
+
+router.get('/sede/edits/:idsucursal', async (req,res) =>{
+   const { idsucursal } = req.params;
+   const sucursal = await pool.query('SELECT * FROM sucursales WHERE idsucursal=?', [idsucursal]);
+   res.render('inicio/sede/edits', {sucursal:sucursal[0]});
+});
+
+
+//POSTS
+router.post('/sede/edits/:idsucursal', async (req,res) => {
+    const { idsucursal } = req.params;
+    const { snombre, direccion } = req.body;
+    const update = {
+        snombre,
+        direccion 
+    };
+    
+    await pool.query('UPDATE sucursales set ? WHERE idsucursal=?', [update,idsucursal]);
+    res.redirect('/inicio/sede/listas');
+});
+
+router.post('/cargo/ingresarc', async (req,res)=>{
+    const { cnombre, horario, departamento } = req.body;
+    const anadir = { 
+        cnombre,
+        horario, 
+        departamento
+    };
+    await pool.query('INSERT INTO cargos set ?', [anadir]);
+    res.redirect('/inicio/cargo/listac');
+})
+
+//FIN CARGOS
 module.exports = router;

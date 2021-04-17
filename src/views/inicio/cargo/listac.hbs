@@ -1,0 +1,42 @@
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <div class="card card-body text-center">
+               <a href="/inicio/cargo/ingresarc"><button class="btn btn-success btn-block">Añadir cargo</button></a> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container p-4">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Cargo</th>
+      <th scope="col">N° empleados</th>
+      <th scope="col">Horas</th>
+      <th scope="col">Departamento</th>
+      <th scope="col">Modificar</th>
+      <th scope="col"></th> 
+    </tr>
+  </thead>
+  <tbody>
+    {{#each lista}}
+    <tr>
+      <th scope="row">{{idcargo}}</th>
+      
+      <td>{{cnombre}}</td>
+      
+      <td>{{nempleados}}</td>
+      
+      <td>{{fentrada}} - {{fsalida}}</td>
+
+      <td>{{departamento}}</td>
+        
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+</div>

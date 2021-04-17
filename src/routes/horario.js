@@ -12,3 +12,5 @@ router.get('/horario/listah', async (req, res) => {
 
 });
 module.exports = router;
+
+//FIN HORARIOS
