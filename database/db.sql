@@ -25,13 +25,13 @@ CREATE TABLE sucursales(
     idsucursal INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     snombre VARCHAR(40) NOT NULL,
     direccion VARCHAR(200) NOT NULL,
-    nempleados INT(5) NOT NULL
+    sempleados INT(5) NOT NULL
 );
 
 CREATE TABLE departamentos(
     iddepartamento INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     depnombre VARCHAR(20) NOT NULL,
-    nempleados INT(4) NOT NULL,
+    dempleados INT(4) NOT NULL,
     sucursal INT(15),
     FOREIGN KEY fk_sucursal(sucursal) REFERENCES sucursales(idsucursal)
 );
@@ -39,7 +39,7 @@ CREATE TABLE departamentos(
 CREATE TABLE cargos(
     idcargo INT(15) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     cnombre VARCHAR(20) NOT NULL,
-    nempleados INT(2) NOT NULL,
+    cempleados INT(2) NOT NULL,
     horario INT(2),
     departamento INT(15),
     FOREIGN KEY fk_horario(horario) REFERENCES horarios(idhorario),

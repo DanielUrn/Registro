@@ -1,0 +1,38 @@
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <div class="card card-body text-center">
+               <a href="/inicio/departamento/ingresard"><button class="btn btn-success btn-block">Añadir departamento</button></a> 
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container p-4">
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">N° Empleados</th>
+      <th scope="col">Sucursal</th>
+      <th scope="col">Modificar</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each lista}}
+    <tr>
+      <th scope="row">{{iddepartamento}}</th>
+      <td>{{depnombre}}</td>
+      <td>{{nempleados}}</td>
+      <td>{{snombre}}</td>
+      <td><a href="/departamento/editd/{{iddepartamento}}" class="btn btn-secondary">Editar</a></td>
+      <td><a href="/departamento/borrar/{{iddepartamento}}" class="btn btn-danger">Borrar</a></td> 
+      
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+</div>
