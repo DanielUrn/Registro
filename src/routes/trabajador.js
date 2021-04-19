@@ -5,12 +5,13 @@ const router = express.Router();
 //TRABAJADORES
 //GETS
 router.get('/ingresart', (req, res)=> {
-    res.render('inicio/trabajador/ingresart');
+    const cargo = await pool.query('SELECT idcargo,cnombre FROM cargos');
+    res.render('inicio/trabajador/ingresart',{cargo});
 })
 
 router.get('/listat', async (req, res) => {
 
-    const lista = await pool.query('SELECT * FROM empleados ORDER BY nombre');
+    const lista = await pool.query('SELECT idempleado,nombre,cedula,direccion,correo,telefono,cnombre FROM empleados INNER JOIN cargos ON empleados.cargo = cargos.idcargo ORDER BY nombre');
     res.render('inicio/trabajador/listat', {lista: lista});
 
 });
@@ -29,13 +30,14 @@ router.get('/editt/:idempleado', async (req,res) =>{
 
 //POSTS
 router.post('/ingresart', async (req,res)=>{
-    const { nombre, cedula, direccion, correo, telefono } = req.body;
+    const { nombre, cedula, direccion, correo, telefono, cargo } = req.body;
     const anadir = { 
         nombre,
         cedula, 
         direccion, 
         correo, 
-        telefono
+        telefono,
+        cargo
     };
     
     await pool.query('INSERT INTO empleados set ?', [anadir]);
@@ -44,13 +46,14 @@ router.post('/ingresart', async (req,res)=>{
 
 router.post('/editt/:idempleado', async (req,res) => {
     const { idempleado } = req.params;
-    const { nombre, cedula, direccion, correo, telefono } = req.body;
+    const { nombre, cedula, direccion, correo, telefono,cargo } = req.body;
     const update = {
         nombre,
         cedula, 
         direccion, 
         correo, 
-        telefono
+        telefono,
+        cargo
     };
     
     await pool.query('UPDATE empleados set ? WHERE idempleado=?', [update,idempleado]);

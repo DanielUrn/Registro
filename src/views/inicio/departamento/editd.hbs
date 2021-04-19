@@ -3,34 +3,35 @@
         <div class="col-md-4 my-auto mx-auto">
             <div class="card">
                 <div class="card-body">
-                    <div class="container p-1 text-center"> <h2>EMPLEADO</h2> </div>
-                    <form action="/inicio/trabajador/editt/{{empleado.idempleado}}" method="POST">
-
+                    <div class="container p-1 text-center"> <h2>DEPARTAMENTO</h2> </div>
+                    <form class="row g-3"  action="/inicio/departamento/editd/{{departamento.iddepartamento}}"  method="POST">
+                        
                         <div class="form-group p-1">
-                            <input type="text" value="{{empleado.nombre}}"class="form-control" name="nombre" placeholder="Nombre">
+                            <div class="col text-center">
+                                <label for="validationDefault02" class="form-label">Nombre</label>
+                          <input type="text" class="form-control" id="validationDefault01" value="{{departamento.depnombre}}" name="depnombre" placeholder="Nombre" required>
+                        </div>
                         </div>
                         
                         <div class="form-group p-1">
-                            <input type="text" value="{{empleado.cedula}}" class= "form-control" name="cedula" placeholder="Cedula">
+                            <div class="col text-center">
+                          <label for="validationDefault04" class="form-label">Sucursal</label>
+                          <select class="form-select" id="validationDefault04" name="sucursal" required>
+                            <option selected disabled value="{{departamento.sucursal}}">Escoger Sucursal</option>
+                            {{#each sucursal}}
+                                <option value={{idsucursal}}>{{snombre}}</option>
+                                {{/each}}
+                          </select>
                         </div>
 
-                        <div class="form-group p-1">
-                            <input type="text" value="{{empleado.correo}}" class= "form-control" name="correo" placeholder="Correo">
-                        </div>      
+                        </div>
                         
-                        <div class="form-group p-1">
-                            <input type="text" value="{{empleado.telefono}}" class= "form-control" name="telefono" placeholder="Telefono">
-                        </div>                                          
+                        
 
-                        <div class="form-group p-1">
-                            <textarea class="form-control" rows="2"  name="direccion" placeholder="Direccion">{{empleado.direccion}}</textarea>
-                        </div>     
-
-                        <div class="form-group text-center p-3">
-                            <button class="btn btn-success btn-block">Actualizar trabajador</button>
-                        </div>                   
-
-                    </form>
+                        <div class="form-group p-1 text-center">
+                            <div class="col-12">
+                          <button class="btn btn-primary" type="submit">Actualizar departamento</button>
+                        </div>
                 </div>
             </div>
         </div>

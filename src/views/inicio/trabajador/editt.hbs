@@ -4,33 +4,66 @@
             <div class="card">
                 <div class="card-body">
                     <div class="container p-1 text-center"> <h2>EMPLEADO</h2> </div>
-                    <form action="/inicio/trabajador/editt/{{empleado.idempleado}}" method="POST">
 
+                    <form class="row g-3"  action="/inicio/trabajador/editt/{{empleado.idempleado}}"  method="POST">
+                        
                         <div class="form-group p-1">
-                            <input type="text" value="{{empleado.nombre}}"class="form-control" name="nombre" placeholder="Nombre">
+                            <div class="col text-center">
+                                <label for="validationDefault02" class="form-label">Nombre</label>
+                          <input type="text" class="form-control" id="validationDefault01" value="{{empleado.nombre}}" name="nombre" placeholder="Nombre" required>
+                        </div>
+                        </div>
+                        
+                        <div class="col text-center">
+                          <label for="validationDefault02" class="form-label">Cedula</label>
+                          <input type="number" class="form-control" id="validationDefault02" value="{{empleado.cedula}}" name="cedula" placeholder="Cedula" required>
+                        </div>
+                    
+                        <div class="form-group p-1">
+                            <div class="col text-center">
+                          <label for="validationDefault03" class="form-label">Direccion</label>
+                          <input type="text" class="form-control" id="validationDefault03" value="{{empleado.direccion}}" name="direccion" placeholder="Dirección" required>
+                        </div>
                         </div>
                         
                         <div class="form-group p-1">
-                            <input type="text" value="{{empleado.cedula}}" class= "form-control" name="cedula" placeholder="Cedula">
+                            <div class="col text-center">
+                          <label for="validationDefault03" class="form-label">Correo</label>
+                          <input type="email" class="form-control" id="validationDefault03" value="{{empleado.correo}}" name="correo" placeholder="Correo" required>
                         </div>
-
-                        <div class="form-group p-1">
-                            <input type="text" value="{{empleado.correo}}" class= "form-control" name="correo" placeholder="Correo">
-                        </div>      
+                        </div>
                         
                         <div class="form-group p-1">
-                            <input type="text" value="{{empleado.telefono}}" class= "form-control" name="telefono" placeholder="Telefono">
-                        </div>                                          
+                            <div class="col text-center">
+                          <label for="validationDefault04" class="form-label">Cargo</label>
+                          <select class="form-select" id="validationDefault04" name="cargo" required>
+                            <option selected disabled value="{{empleado.cargo}}">Escoger cargo</option>
+                            {{#each cargos}}
+                                <option value={{idcargo}}>{{cnombre}} - {{depnombre}}</option>
+                                {{/each}}
+                          </select>
+                        </div>
 
+                        </div>
+                        
+                        
                         <div class="form-group p-1">
-                            <textarea class="form-control" rows="2"  name="direccion" placeholder="Direccion">{{empleado.direccion}}</textarea>
-                        </div>     
+                            <div class="col text-center">
+                          <label for="validationDefault05" class="form-label">Teléfono</label>
+                          <input type="number" class="form-control" id="validationDefault05" value="{{empleado.telefono}}" name="telefono" required>
+                        </div>
 
-                        <div class="form-group text-center p-3">
-                            <button class="btn btn-success btn-block">Actualizar trabajador</button>
-                        </div>                   
+                        </div>
+                        
 
-                    </form>
+                        <div class="form-group p-1 text-center">
+                            <div class="col-12">
+                          <button class="btn btn-primary" type="submit">Actualizar trabajador</button>
+                        </div>
+
+                        </div>
+</form>
+                        
                 </div>
             </div>
         </div>

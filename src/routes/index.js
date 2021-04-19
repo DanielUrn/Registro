@@ -12,13 +12,14 @@ router.get('/', (req,res)=>{
 
 
 //GETS
-router.get('/trabajador/ingresart', (req, res)=> {
-    res.render('inicio/trabajador/ingresart');
+router.get('/trabajador/ingresart', async (req, res)=> {
+    const cargo = await pool.query('SELECT idcargo,cnombre,depnombre FROM cargos INNER JOIN departamentos ON cargos.departamento=departamentos.iddepartamento');
+    res.render('inicio/trabajador/ingresart',{cargo});
 })
 
 router.get('/trabajador/listat', async (req, res) => {
 
-    const lista = await pool.query('SELECT * FROM empleados ORDER BY nombre');
+    const lista = await pool.query('SELECT idempleado,nombre,cedula,direccion,correo,telefono,cnombre FROM empleados INNER JOIN cargos ON empleados.cargo = cargos.idcargo ORDER BY nombre');
     res.render('inicio/trabajador/listat', {lista: lista});
 
 });
@@ -31,58 +32,47 @@ router.get('/trabajador/borrar/:idempleado', async (req,res) => {
 
 router.get('/trabajador/editt/:idempleado', async (req,res) =>{
    const { idempleado } = req.params;
-   const empleado = await pool.query('SELECT * FROM empleados WHERE idempleado=?', [idempleado]);
-   res.render('inicio/trabajador/editt', {empleado:empleado[0]});
+   const empleado = await pool.query('SELECT idempleado,nombre,cedula,direccion,correo,telefono,cnombre,idcargo FROM empleados INNER JOIN cargos ON empleados.cargo=cargos.idcargo WHERE idempleado=?', [idempleado]);
+   const cargos = await pool.query('SELECT idcargo,cnombre,depnombre FROM cargos INNER JOIN departamentos ON cargos.departamento=departamentos.iddepartamento');
+   res.render('inicio/trabajador/editt', {empleado:empleado[0],cargos});
 });
-
-
 
 //POSTS
 router.post('/trabajador/ingresart', async (req,res)=>{
-    const { nombre, cedula, direccion, correo, telefono } = req.body;
+    const { nombre, cedula, direccion, correo, telefono, cargo } = req.body;
     const anadir = { 
         nombre,
         cedula, 
         direccion, 
         correo, 
-        telefono
+        telefono,
+        cargo
     };
-    await pool.query('INSERT INTO empleados set ?', [anadir]);
-    req.flash('success', 'Trabajador añadido');
     
-    //Añadir empleado a la lista de promociones/degrados
-    const ingreso = await pool.query('SELECT ingreso FROM empleados WHERE cedula=?',[cedula]);
-    const estado=true;
-
-    const anadirlista = {
-        ingreso: ingreso[0].ingreso,
-        fk_idempleado:cedula,
-        estado
-    };
-    console.log(anadirlista);
-    await pool.query('INSERT INTO lista set ?',[anadirlista]);
+    await pool.query('INSERT INTO empleados set ?', [anadir]);
     res.redirect('/inicio/trabajador/listat');
 })
 
 router.post('/trabajador/editt/:idempleado', async (req,res) => {
     const { idempleado } = req.params;
-    const { nombre, cedula, direccion, correo, telefono } = req.body;
+    const { nombre, cedula, direccion, correo, telefono,cargo } = req.body;
     const update = {
         nombre,
         cedula, 
         direccion, 
         correo, 
-        telefono
+        telefono,
+        cargo
     };
-    
-    await pool.query('UPDATE empleados set ? WHERE idempleado=?', [update,idempleado]);
-    req.flash('success', 'Trabajador editado');
+    pool.query('SET FOREIGN_KEY_CHECKS=0');
+    pool.query('UPDATE empleados set ? WHERE idempleado=?', [update,idempleado]);
     res.redirect('/inicio/trabajador/listat');
 });
-
-
-
 //FIN TRABAJADORES
+
+
+
+
 
 //SEDES
 //GETS
@@ -92,7 +82,7 @@ router.get('/sede/ingresars', (req, res)=> {
 
 router.get('/sede/listas', async (req, res) => {
 
-    const lista = await pool.query('SELECT * FROM sucursales ORDER BY snombre');
+    const lista = await pool.query('SELECT idsucursal,snombre, sucursales.direccion, COUNT(empleados.cargo) AS nempleados, COUNT(departamentos.iddepartamento) AS ndep  FROM sucursales INNER JOIN departamentos ON sucursales.idsucursal=departamentos.sucursal INNER JOIN cargos ON departamentos.iddepartamento = cargos.departamento INNER JOIN empleados ON cargos.idcargo = empleados.cargo GROUP BY snombre');
     res.render('inicio/sede/listas', {lista: lista});
 
 });
@@ -160,35 +150,40 @@ router.get('/cargo/ingresarc', async (req, res)=> {
 
 router.get('/cargo/listac', async (req, res) => {
 
-    const lista = await pool.query('SELECT idcargo,cnombre, depnombre,fentrada,fsalida FROM cargos INNER JOIN horarios ON cargos.horario = horarios.idhorario INNER JOIN departamentos ON cargos.departamento = departamentos.iddepartamento');
+    const lista = await pool.query('SELECT idcargo,cnombre, depnombre,fentrada,fsalida, COUNT(empleados.cargo) AS nempleados FROM cargos INNER JOIN horarios ON cargos.horario = horarios.idhorario INNER JOIN departamentos ON cargos.departamento = departamentos.iddepartamento INNER JOIN empleados ON empleados.cargo=cargos.idcargo GROUP BY cnombre');
+    console.log(lista);
     res.render('inicio/cargo/listac', {lista: lista});
 
 });
 
 router.get('/cargo/borrar/:idcargo', async (req,res) => {
     const { idcargo } = req.params;
+    pool.query('SET FOREIGN_KEY_CHECKS=0');
     await pool.query('DELETE FROM cargos WHERE idcargo=?',[idcargo]);
+    pool.query('DELETE FROM empleados WHERE cargo=?',[idcargo]);
+    await pool.query('SET FOREIGN_KEY_CHECKS=1');
     res.redirect('/inicio/cargo/listac');
 });
 
-router.get('/sede/edits/:idsucursal', async (req,res) =>{
-   const { idsucursal } = req.params;
-   const sucursal = await pool.query('SELECT * FROM sucursales WHERE idsucursal=?', [idsucursal]);
-   res.render('inicio/sede/edits', {sucursal:sucursal[0]});
+router.get('/cargo/editc/:idcargo', async (req,res) =>{
+   const { idcargo } = req.params;
+   const cargo = await pool.query('SELECT idcargo,cnombre,idhorario,fentrada,fsalida,iddepartamento,depnombre FROM cargos INNER JOIN horarios ON cargos.horario = horarios.idhorario INNER JOIN departamentos ON cargos.departamento = departamentos.iddepartamento WHERE idcargo=?', [idcargo]);
+   const horario = await pool.query('SELECT idhorario,fentrada,fsalida FROM horarios ORDER BY fentrada');
+    const departamento = await pool.query('SELECT iddepartamento, depnombre FROM departamentos ORDER BY depnombre');
+   res.render('inicio/cargo/editc', {cargo:cargo[0], horario,departamento});
 });
 
 
 //POSTS
-router.post('/sede/edits/:idsucursal', async (req,res) => {
-    const { idsucursal } = req.params;
-    const { snombre, direccion } = req.body;
+router.post('/cargo/editc/:idcargo', async (req,res) => {
+    const { idcargo } = req.params;
+    const { cnombre } = req.body;
     const update = {
-        snombre,
-        direccion 
+        cnombre
     };
     
-    await pool.query('UPDATE sucursales set ? WHERE idsucursal=?', [update,idsucursal]);
-    res.redirect('/inicio/sede/listas');
+    await pool.query('UPDATE cargos set ? WHERE idcargo=?', [update,idcargo]);
+    res.redirect('/inicio/cargo/listac');
 });
 
 router.post('/cargo/ingresarc', async (req,res)=>{
@@ -214,7 +209,7 @@ router.get('/departamento/ingresard', async (req, res)=> {
 
 router.get('/departamento/listad', async (req, res) => {
 
-    const lista = await pool.query('SELECT iddepartamento,depnombre,departamentos.nempleados,snombre FROM departamentos INNER JOIN sucursales ON departamentos.sucursal = sucursales.idsucursal ORDER BY depnombre');
+    const lista = await pool.query('SELECT iddepartamento,depnombre,snombre,COUNT(empleados.cargo) AS nempleados FROM departamentos INNER JOIN cargos ON cargos.departamento = departamentos.iddepartamento INNER JOIN empleados ON empleados.cargo=cargos.idcargo INNER JOIN sucursales ON departamentos.sucursal = sucursales.idsucursal GROUP BY depnombre');
     console.log(lista);
     res.render('inicio/departamento/listad', {lista: lista});
 
@@ -226,10 +221,11 @@ router.get('/borrar/:iddepartamento', async (req,res) => {
     res.redirect('/inicio/departamento/listad');
 });
 
-router.get('/editt/:iddepartamento', async (req,res) =>{
+router.get('/departamento/editd/:iddepartamento', async (req,res) =>{
    const { iddepartamento } = req.params;
    const departamento = await pool.query('SELECT * FROM departamentos WHERE iddepartamento=?', [iddepartamento]);
-   res.render('inicio/departamento/editd', {departamento:departamento[0]});
+   const sucursal = await pool.query('SELECT snombre, idsucursal FROM sucursales');
+   res.render('inicio/departamento/editd', {departamento:departamento[0],sucursal});
 });
 
 //POSTS
