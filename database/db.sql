@@ -42,8 +42,28 @@ CREATE TABLE empleados(
     direccion VARCHAR(120),
     correo VARCHAR(30) NOT NULL,
     telefono VARCHAR(15),
-    ingreso   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    editado   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     cargo INT(15),
     FOREIGN KEY fk_cargo(cargo) REFERENCES cargos(idcargo)
 );
+
+INSERT INTO sucursales VALUE(1,'Maracaibo','Sabaneta');
+INSERT INTO sucursales VALUE(2,'Tucupita','Plaza Bolívar');
+
+INSERT INTO departamentos VALUE (1,'Informática',1);
+INSERT INTO departamentos VALUE (2,'Recursos Humanos',1);
+INSERT INTO departamentos VALUE (3,'Logística',2);
+INSERT INTO departamentos VALUE (4,'Aseo',2);
+
+INSERT INTO cargos VALUE(1,'Ingeniero',1,1);
+INSERT INTO cargos VALUE(2,'Psicólogo',1,2);
+INSERT INTO cargos VALUE(3,'Ingeniero',4,1);
+INSERT INTO cargos VALUE(4,'Estadísta',2,3);
+INSERT INTO cargos VALUE(5,'Limpieza',1,4);
+INSERT INTO cargos VALUE(6,'Limpieza',2,4);
+
+INSERT INTO empleados VALUE(1,'Rafael Escalona',1,'Maturín','rafaelescalona@gmail.com','414-6980',1);
+INSERT INTO empleados VALUE(2,'Isabel',1,'Maracaibo','1252fa@gmail.com','414-6880',2);
+INSERT INTO empleados VALUE(3,'Carlos',1,'El bajo','Carlosguerra@gmail.com','414-89540',3);
+INSERT INTO empleados VALUE(4,'Carla',1,'La curva','carlaguerra@gmail.com','414-2353531',4);
+INSERT INTO empleados VALUE(5,'Galo Shiera',1,'Cabimas','galshiera@gmail.com','414-65162',5);
+INSERT INTO empleados VALUE(6,'Jimmy Stavinsky',1,'Pomona','pirata@gmail.com','414-894123',6);

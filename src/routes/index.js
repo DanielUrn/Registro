@@ -151,7 +151,6 @@ router.get('/cargo/ingresarc', async (req, res)=> {
 router.get('/cargo/listac', async (req, res) => {
 
     const lista = await pool.query('SELECT idcargo,cnombre, depnombre,fentrada,fsalida, COUNT(empleados.cargo) AS nempleados FROM cargos INNER JOIN horarios ON cargos.horario = horarios.idhorario INNER JOIN departamentos ON cargos.departamento = departamentos.iddepartamento INNER JOIN empleados ON empleados.cargo=cargos.idcargo GROUP BY cnombre');
-    console.log(lista);
     res.render('inicio/cargo/listac', {lista: lista});
 
 });
@@ -210,14 +209,14 @@ router.get('/departamento/ingresard', async (req, res)=> {
 router.get('/departamento/listad', async (req, res) => {
 
     const lista = await pool.query('SELECT iddepartamento,depnombre,snombre,COUNT(empleados.cargo) AS nempleados FROM departamentos INNER JOIN cargos ON cargos.departamento = departamentos.iddepartamento INNER JOIN empleados ON empleados.cargo=cargos.idcargo INNER JOIN sucursales ON departamentos.sucursal = sucursales.idsucursal GROUP BY depnombre');
-    console.log(lista);
     res.render('inicio/departamento/listad', {lista: lista});
 
 });
 
-router.get('/borrar/:iddepartamento', async (req,res) => {
+router.get('/departamento/borrar/:iddepartamento', async (req,res) => {
     const { iddepartamento } = req.params;
-    await pool.query('DELETE FROM departamentos WHERE iddepartamento=?',[iddepartamento]);
+    pool.query('SET FOREIGN_KEY_CHECKS=0');
+    pool.query('DELETE FROM departamentos WHERE iddepartamento=?',[iddepartamento]);
     res.redirect('/inicio/departamento/listad');
 });
 
